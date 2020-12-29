@@ -6,16 +6,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.noteapp.data.model.NoteModel
 import com.example.noteapp.databinding.NoteItemBinding
 
-class NoteAdapter(private val noteList: ArrayList<NoteModel> = arrayListOf()) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private lateinit var binding: NoteItemBinding
+class NoteAdapter(private val noteList: ArrayList<NoteModel> = arrayListOf(),private val  onClickDelete: (NoteModel) -> Unit) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        binding = NoteItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
+        val binding = NoteItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return NoteViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        binding.txtNote.text = noteList[position].text
+    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+        val note = noteList[position]
+        with(holder) {
+            binding.txtNote.text = note.text
+            binding.btnDelete.setOnClickListener {
+                onClickDelete(note)
+            }
+        }
     }
 
     override fun getItemCount(): Int = noteList.count()
@@ -26,5 +31,5 @@ class NoteAdapter(private val noteList: ArrayList<NoteModel> = arrayListOf()) : 
         notifyDataSetChanged()
     }
 
-    inner class NoteViewHolder(private val binding: NoteItemBinding): RecyclerView.ViewHolder(binding.root)
+    inner class NoteViewHolder(val binding: NoteItemBinding): RecyclerView.ViewHolder(binding.root)
 }
