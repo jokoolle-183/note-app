@@ -8,12 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.noteapp.data.model.NoteModel
 import com.example.noteapp.data.model.repo.NoteRepo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeViewModel @ViewModelInject constructor (private val noteRepo: NoteRepo) : ViewModel() {
+@ExperimentalCoroutinesApi
+class HomeViewModel @ViewModelInject constructor(private val noteRepo: NoteRepo) : ViewModel() {
     private val _allNotes = MutableLiveData<List<NoteModel>>()
-    val allNotes:LiveData<List<NoteModel>> = _allNotes
+    val allNotes: LiveData<List<NoteModel>> = _allNotes
 
     init {
         getAllNotes()
@@ -21,10 +24,21 @@ class HomeViewModel @ViewModelInject constructor (private val noteRepo: NoteRepo
 
     private fun getAllNotes() {
         viewModelScope.launch {
-            val result =
-                withContext(Dispatchers.IO) { noteRepo.getNotes() }
+            noteRepo.getNotes().collect { notes ->
+                _allNotes.value = notes
+            }
+        }
+    }
 
-            _allNotes.value = result
+    fun addNote(newNote: NoteModel) {
+        viewModelScope.launch {
+            noteRepo.insertNote(newNote)
+        }
+    }
+
+    fun deleteNote(noteModel: NoteModel) {
+        viewModelScope.launch {
+            noteRepo.deleteNote(noteModel)
         }
     }
 }
