@@ -23,10 +23,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         homeViewModel.deleteNote(noteModel)
     }
 
-//    private val onClickEdit: (NoteModel) -> Unit = {noteModel ->
-//        homeViewModel.onEditStart(noteModel)
-//    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         noteAdapter = NoteAdapter(onClickDelete = onClickDelete, viewModel = homeViewModel)

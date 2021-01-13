@@ -13,9 +13,6 @@ class HomeViewModel @ViewModelInject constructor(private val noteRepo: NoteRepo)
     private val _allNotesLiveData = MutableLiveData<List<NoteModel>>()
     val allNotesLiveData: LiveData<List<NoteModel>> = _allNotesLiveData
 
-    private val _onEditCompletedLiveData = MutableLiveData<Int>()
-    val onEditCompletedLiveData: LiveData<Int> = _onEditCompletedLiveData
-
     init {
         getAllNotes()
     }
@@ -40,24 +37,10 @@ class HomeViewModel @ViewModelInject constructor(private val noteRepo: NoteRepo)
         }
     }
 
-    fun onEditStart(note: NoteModel) {
-
-    }
-
-    fun onEditCancelled() {
-
-    }
-
     fun onEditCompleted(note: NoteModel) {
         viewModelScope.launch {
             noteRepo.updateNote(note)
         }
     }
-}
-
-enum class Edit {
-    EDIT_START,
-    EDIT_CANCELLED,
-    EDIT_COMPLETED
 }
 

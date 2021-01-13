@@ -17,6 +17,10 @@ class NoteAdapter @ExperimentalCoroutinesApi constructor(
     private val onClickDelete: (NoteModel) -> Unit,
 ) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
+    //TODO: Implement DiffCallback for dispatching changes
+    //TODO: Implement mechanism for handling item insertion, removal and updating
+    //TODO: Remove Kotlin Flow, not suitable for this app
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val binding = NoteItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return NoteViewHolder(binding)
@@ -42,6 +46,8 @@ class NoteAdapter @ExperimentalCoroutinesApi constructor(
 
     override fun getItemCount(): Int = noteList.count()
 
+    //This should be called only when items from the db are received
+    //TODO: For other operations, such as insertion, deletion and updating, use DiffCallback and congruent mechanisms
     fun setNotes(list: List<NoteModel>) {
         noteList.clear()
         noteList.addAll(list)
@@ -49,6 +55,7 @@ class NoteAdapter @ExperimentalCoroutinesApi constructor(
     }
 
     inner class NoteViewHolder(val binding: NoteItemBinding): RecyclerView.ViewHolder(binding.root) {
+        //TODO: Beautify this monstrosity somehow
         fun onEditStart() {
             binding.apply {
                 btnEdit.visibility = View.INVISIBLE
