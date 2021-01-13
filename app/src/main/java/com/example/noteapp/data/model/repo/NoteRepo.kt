@@ -30,4 +30,8 @@ class NoteRepo @Inject constructor(private val db: NoteDao) {
     suspend fun deleteNote(note: NoteModel) {
         db.deleteNote(note)
     }
+
+    suspend fun updateNote(note: NoteModel) {
+        db.updateNote(note)
+    }
 }

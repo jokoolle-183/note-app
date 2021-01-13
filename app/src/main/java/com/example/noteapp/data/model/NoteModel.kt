@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 @Entity
 data class NoteModel(
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
+    var id: Int = 0,
     val text: String
     )

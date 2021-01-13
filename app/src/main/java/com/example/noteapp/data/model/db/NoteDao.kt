@@ -1,9 +1,6 @@
 package com.example.noteapp.data.model.db
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.noteapp.data.model.NoteModel
 import kotlinx.coroutines.flow.Flow
 
@@ -18,6 +15,6 @@ interface NoteDao {
     @Delete
     suspend fun deleteNote(noteModel: NoteModel)
 
-    @Insert
-    suspend fun prepoluate(notes: List<NoteModel>)
+    @Update
+    suspend fun updateNote(note: NoteModel)
 }

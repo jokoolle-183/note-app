@@ -19,11 +19,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var noteAdapter: NoteAdapter
     private val homeViewModel: HomeViewModel by viewModels()
 
+    private val onClickDelete: (NoteModel) -> Unit  = { noteModel ->
+        homeViewModel.deleteNote(noteModel)
+    }
+
+//    private val onClickEdit: (NoteModel) -> Unit = {noteModel ->
+//        homeViewModel.onEditStart(noteModel)
+//    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        noteAdapter = NoteAdapter {id ->
-            homeViewModel.deleteNote(id)
-        }
+        noteAdapter = NoteAdapter(onClickDelete = onClickDelete, viewModel = homeViewModel)
         binding.rvNotes.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = noteAdapter
@@ -36,7 +42,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun observeAllNotes() {
-        homeViewModel.allNotes.observe(viewLifecycleOwner) {noteList ->
+        homeViewModel.allNotesLiveData.observe(viewLifecycleOwner) { noteList ->
             noteAdapter.setNotes(noteList)
         }
     }
