@@ -1,18 +1,20 @@
 package com.example.noteapp.data.model.db
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.noteapp.data.model.NoteModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
-    @Query("SELECT * FROM notemodel")
-    fun getNotes(): List<NoteModel>
+    @Query("SELECT * FROM notemodel ORDER by id ")
+    suspend fun getNotes(): List<NoteModel>
 
     @Insert
-    fun insertNote(noteModel: NoteModel)
+    suspend fun insertNote(noteModel: NoteModel): Long
 
-    @Insert
-    fun prepoluate(notes: List<NoteModel>)
+    @Delete
+    suspend fun deleteNote(noteModel: NoteModel)
+
+    @Update
+    suspend fun updateNote(note: NoteModel)
 }

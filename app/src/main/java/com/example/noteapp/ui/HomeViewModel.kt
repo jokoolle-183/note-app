@@ -1,19 +1,26 @@
 package com.example.noteapp.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.noteapp.data.model.NoteModel
 import com.example.noteapp.data.model.repo.NoteRepo
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class HomeViewModel @ViewModelInject constructor (private val noteRepo: NoteRepo) : ViewModel() {
-    private val _allNotes = MutableLiveData<List<NoteModel>>()
-    val allNotes:LiveData<List<NoteModel>> = _allNotes
+@ExperimentalCoroutinesApi
+class HomeViewModel @ViewModelInject constructor(private val noteRepo: NoteRepo) : ViewModel() {
+    private val _allNotesLiveData = MutableLiveData<List<NoteModel>>()
+    val allNotesLiveData: LiveData<List<NoteModel>> = _allNotesLiveData
+
+    private val _insertedNote = MutableLiveData<NoteModel>()
+    val insertedNote: LiveData<NoteModel> = _insertedNote
+
+    private val _deletedNotePosition = MutableLiveData<Int>()
+    val deletedNotePosition: LiveData<Int> = _deletedNotePosition
+
+    private val _updatedNotePosition = MutableLiveData<Pair<NoteModel,Int>>()
+    val updatedNotePosition : LiveData<Pair<NoteModel,Int>> = _updatedNotePosition
 
     init {
         getAllNotes()
@@ -21,10 +28,29 @@ class HomeViewModel @ViewModelInject constructor (private val noteRepo: NoteRepo
 
     private fun getAllNotes() {
         viewModelScope.launch {
-            val result =
-                withContext(Dispatchers.IO) { noteRepo.getNotes() }
+           val notes =  noteRepo.getNotes()
+            _allNotesLiveData.value = notes
+        }
+    }
 
-            _allNotes.value = result
+    fun addNote(newNote: NoteModel) {
+        viewModelScope.launch {
+            val rowId = noteRepo.insertNote(newNote)
+            _insertedNote.value = newNote.copy(id = rowId)
+        }
+    }
+
+    fun deleteNote(noteModel: NoteModel, position: Int) {
+        viewModelScope.launch {
+            noteRepo.deleteNote(noteModel)
+            _deletedNotePosition.value = position
+        }
+    }
+
+    fun onEditCompleted(note: NoteModel, position: Int) {
+        viewModelScope.launch {
+            noteRepo.updateNote(note)
+            _updatedNotePosition.value = Pair(note,position)
         }
     }
 }

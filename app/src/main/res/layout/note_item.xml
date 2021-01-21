@@ -41,5 +41,75 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivOutline"/>
 
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/editTxtNote"
+        android:layout_width="0dp"
+        android:background="@null"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/ivOutline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnEdit"/>
+
+    <ImageButton
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        android:src="@drawable/ic_baseline_done_24"
+        android:layout_marginHorizontal="8dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/btnCancel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btnEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_baseline_edit_24"
+        android:layout_marginHorizontal="8dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/btnDelete"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        android:src="@drawable/ic_cancel"
+        android:layout_marginHorizontal="8dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_baseline_delete_outline_24"
+        android:layout_marginHorizontal="8dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
