@@ -13,33 +13,44 @@ class HomeViewModel @ViewModelInject constructor(private val noteRepo: NoteRepo)
     private val _allNotesLiveData = MutableLiveData<List<NoteModel>>()
     val allNotesLiveData: LiveData<List<NoteModel>> = _allNotesLiveData
 
+    private val _insertedNote = MutableLiveData<NoteModel>()
+    val insertedNote: LiveData<NoteModel> = _insertedNote
+
+    private val _deletedNotePosition = MutableLiveData<Int>()
+    val deletedNotePosition: LiveData<Int> = _deletedNotePosition
+
+    private val _updatedNotePosition = MutableLiveData<Pair<NoteModel,Int>>()
+    val updatedNotePosition : LiveData<Pair<NoteModel,Int>> = _updatedNotePosition
+
     init {
         getAllNotes()
     }
 
     private fun getAllNotes() {
         viewModelScope.launch {
-            noteRepo.getNotes().collect { notes ->
-                _allNotesLiveData.value = notes
-            }
+           val notes =  noteRepo.getNotes()
+            _allNotesLiveData.value = notes
         }
     }
 
     fun addNote(newNote: NoteModel) {
         viewModelScope.launch {
-            noteRepo.insertNote(newNote)
+            val rowId = noteRepo.insertNote(newNote)
+            _insertedNote.value = newNote.copy(id = rowId)
         }
     }
 
-    fun deleteNote(noteModel: NoteModel) {
+    fun deleteNote(noteModel: NoteModel, position: Int) {
         viewModelScope.launch {
             noteRepo.deleteNote(noteModel)
+            _deletedNotePosition.value = position
         }
     }
 
-    fun onEditCompleted(note: NoteModel) {
+    fun onEditCompleted(note: NoteModel, position: Int) {
         viewModelScope.launch {
             noteRepo.updateNote(note)
+            _updatedNotePosition.value = Pair(note,position)
         }
     }
 }

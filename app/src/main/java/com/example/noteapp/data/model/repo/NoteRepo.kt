@@ -14,18 +14,11 @@ import javax.inject.Singleton
 @Singleton
 class NoteRepo @Inject constructor(private val db: NoteDao) {
 
-    fun getNotes(): Flow<List<NoteModel>> {
+    suspend fun getNotes(): List<NoteModel> {
         return db.getNotes()
-            .flowOn(Dispatchers.IO)
-            .catch { e ->
-                print(e)
-                emit(emptyList())
-            }
     }
 
-    suspend fun insertNote(note: NoteModel) {
-        db.insertNote(note)
-    }
+    suspend fun insertNote(note: NoteModel): Long = db.insertNote(note)
 
     suspend fun deleteNote(note: NoteModel) {
         db.deleteNote(note)

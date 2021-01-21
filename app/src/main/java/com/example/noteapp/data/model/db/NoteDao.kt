@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteDao {
     @Query("SELECT * FROM notemodel ORDER by id ")
-    fun getNotes(): Flow<List<NoteModel>>
+    suspend fun getNotes(): List<NoteModel>
 
     @Insert
-    suspend fun insertNote(noteModel: NoteModel)
+    suspend fun insertNote(noteModel: NoteModel): Long
 
     @Delete
     suspend fun deleteNote(noteModel: NoteModel)
