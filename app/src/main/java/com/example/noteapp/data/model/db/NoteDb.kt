@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.noteapp.data.model.NoteModel
 
-@Database(entities = [NoteModel::class], version = 1, exportSchema = false)
+@Database(entities = [NoteModel::class], version = 3, exportSchema = false)
 abstract class NoteDb: RoomDatabase() {
     abstract fun noteDao(): NoteDao
 
@@ -25,6 +25,7 @@ abstract class NoteDb: RoomDatabase() {
 
         private fun buildDatabase(context: Context): NoteDb {
             return Room.databaseBuilder(context.applicationContext, NoteDb::class.java, "NoteDb")
+                .fallbackToDestructiveMigration()
                 .build()
         }
     }
